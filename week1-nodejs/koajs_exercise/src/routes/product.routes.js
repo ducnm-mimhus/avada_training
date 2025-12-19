@@ -11,6 +11,8 @@ const router = new Router({
 
 router.get("/", productController.home);
 
+router.get("/view", productController.renderHomePage);
+
 router.get("/products", productController.getAll);
 router.post(
   "/products",

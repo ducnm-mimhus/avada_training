@@ -1,0 +1,42 @@
+<!-- Dòng này là tiêu đề trang -->
+<h2 class="mb-4">Danh sách sản phẩm</h2>
+
+<div class="row">
+  <!-- EJS SYNTAX:
+       <% %> : Dùng để viết code logic JS (if, for...)
+       <%= %> : Dùng để hiển thị giá trị biến ra màn hình
+  -->
+
+  <!-- Kiểm tra xem có sản phẩm nào không -->
+  <% if (products && products.length > 0) { %>
+
+  <!-- Vòng lặp duyệt qua từng sản phẩm -->
+  <% products.forEach(item => { %>
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <!-- Hiển thị ảnh -->
+      <img
+        src="<%= item.image_url %>"
+        class="card-img-top"
+        alt="<%= item.name %>"
+        style="height: 200px; object-fit: cover"
+      />
+
+      <div class="card-body">
+        <!-- Tên sản phẩm -->
+        <h5 class="card-title"><%= item.name %></h5>
+
+        <!-- Giá tiền (Format lại cho đẹp) -->
+        <p class="card-text fw-bold text-success">
+          <%= Number(item.price).toLocaleString() %> VND
+        </p>
+
+        <p class="card-text text-muted">Màu: <%= item.color %></p>
+      </div>
+    </div>
+  </div>
+  <% }) %> <% } else { %>
+  <!-- Nếu không có sản phẩm -->
+  <div class="alert alert-warning">Chưa có dữ liệu sản phẩm nào!</div>
+  <% } %>
+</div>

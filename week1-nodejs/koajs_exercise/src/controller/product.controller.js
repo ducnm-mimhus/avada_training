@@ -141,7 +141,24 @@ async function updateOneProduct(ctx) {
   }
 }
 
+async function renderHomePage(ctx) {
+  try {
+    const productList = getAllProducts(10, "desc");
+
+    await ctx.render("home", {
+      products: productList,
+    });
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = {
+      status: "error",
+      message: error.message,
+    };
+  }
+}
+
 module.exports = {
+  renderHomePage,
   home,
   getProductById,
   getAll,

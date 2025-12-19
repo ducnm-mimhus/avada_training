@@ -5,18 +5,12 @@ async function productAddNewMiddleware(ctx, next) {
     const data = ctx.request.body;
 
     let schema = yup.object().shape({
-      name: yup.string().required("Tên sản phẩm là bắt buộc"),
-      price: yup
-        .number()
-        .positive("Giá tiền phải lớn hơn 0")
-        .required("Giá tiền là bắt buộc"),
-      description: yup.string().required("Mô tả là bắt buộc"),
-      category: yup.string().required("Loại sản phẩm là bắt buộc"),
-      color: yup.string().required("Màu sắc là bắt buộc"),
-      image_url: yup
-        .string()
-        .url("Link ảnh không hợp lệ")
-        .required("Ảnh là bắt buộc"),
+      name: yup.string().required(),
+      price: yup.number().positive().required(),
+      description: yup.string().required(),
+      category: yup.string().required(),
+      color: yup.string().required(),
+      image_url: yup.string().url().required(),
     });
 
     await schema.validate(data);
@@ -37,11 +31,11 @@ async function productUpdateMiddleware(ctx, next) {
 
     let schema = yup.object().shape({
       name: yup.string(),
-      price: yup.number().positive("Giá tiền phải lớn hơn 0"),
+      price: yup.number().positive(),
       description: yup.string(),
       category: yup.string(),
       color: yup.string(),
-      image: yup.string().url("Link ảnh không hợp lệ"),
+      image_url: yup.string().url(),
     });
 
     await schema.validate(data);
