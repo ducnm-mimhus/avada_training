@@ -5,11 +5,24 @@ const fs = require("fs");
 const URL = "https://jsonplaceholder.typicode.com";
 
 const fetchData = async (endpoint) => {
+  // try {
+  //   const response = await axios.get(`${URL}${endpoint}`);
+  //   return response.data;
+  // } catch (error) {
+  //   throw error;
+  // }
+
   try {
-    const response = await axios.get(`${URL}${endpoint}`);
-    return response.data;
-  } catch (error) {
-    throw error;
+    const response = await fetch(`${URL}${endpoint}`);
+
+    if (!response.ok) {
+      throw new Error("Error: ", response.status);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    throw err;
   }
 };
 
