@@ -3,8 +3,9 @@ const {
   getAllTodo,
   createTodo,
   findTodoById,
-  updateTodo,
+  completeOne,
   deleteTodo,
+  completeMany,
 } = require("../repository/todo.repository");
 
 function home(ctx) {
@@ -76,9 +77,8 @@ function getById(ctx) {
   }
 }
 
-async function update(ctx) {
-  const { id } = ctx.params;
-  const newItem = ctx.request.body;
+async function updateOne(ctx) {
+  const { id, stt } = ctx.params;
   try {
     if (!findTodoById(id)) {
       ctx.status = 400;
@@ -89,7 +89,7 @@ async function update(ctx) {
       return;
     }
 
-    const updatedItem = await updateTodo(id, newItem);
+    const updatedItem = await completeOne(id, stt);
     ctx.status = 200;
     ctx.body = {
       status: "success",
@@ -97,6 +97,28 @@ async function update(ctx) {
     };
   } catch (error) {
     ctx.status = 500;
+    ctx.body = {
+      status: "error",
+      message: error.message,
+    };
+  }
+}
+
+async function updateMany(ctx) {
+  try {
+    const { listID, stt } = ctx.request.body;
+    const updatedList = await completeMany(listID, stt);
+    ctx.status = 200;
+    ctx.body = {
+      status: "success",
+      data: updatedList,
+    };
+  } catch (error) {
+    if (error.message.includes("khong hop le!")) {
+      ctx.status = 400;
+    } else {
+      ctx.status = 500;
+    }
     ctx.body = {
       status: "error",
       message: error.message,
@@ -125,6 +147,7 @@ module.exports = {
   home,
   getById,
   addNew,
-  update,
+  updateOne,
+  updateMany,
   deleteOne,
 };

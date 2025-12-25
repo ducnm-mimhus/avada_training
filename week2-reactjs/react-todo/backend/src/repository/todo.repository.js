@@ -36,16 +36,56 @@ function findTodoById(id) {
   return todos.find((todo) => todo.id === id);
 }
 
-async function updateTodo(id, item) {
+async function completeOne(id, stt) {
   try {
-    const idx = todos.find((todo) => todo.id === id);
-    const newList = [...todos];
-    newList[idx] = item;
+    const idx = todos.findIndex((todo) => todo.id === id);
+    const newList = todos.map((todo) => {
+      if (todo.id === id) {
+        if (stt === "false") {
+          return {
+            ...todo,
+            isCompleted: false,
+          };
+        } else {
+          return {
+            ...todo,
+            isCompleted: true,
+          };
+        }
+      }
+      return todo;
+    });
 
     await saveToFile(newList);
     return newList[idx];
   } catch (error) {
     throw new Error("Cannot update item!", error.message);
+  }
+}
+
+async function completeMany(ids, stt) {
+  try {
+    const listID = todos.map((todo) => todo.id);
+    const invalidID = ids.filter((id) => !listID.includes(id));
+
+    if (invalidID.length > 0) {
+      throw new Error("Ton tai ID khong hop le!");
+    }
+
+    const updatedList = todos.map((todo) => {
+      if (ids.includes(todo.id)) {
+        return {
+          ...todo,
+          isCompleted: stt,
+        };
+      }
+      return todo;
+    });
+
+    await saveToFile(updatedList);
+    return updatedList;
+  } catch (err) {
+    throw new Error("Cannot update items!", err.message);
   }
 }
 
@@ -63,6 +103,7 @@ module.exports = {
   getAllTodo,
   createTodo,
   findTodoById,
-  updateTodo,
+  completeOne,
   deleteTodo,
+  completeMany,
 };

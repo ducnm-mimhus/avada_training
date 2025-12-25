@@ -7,6 +7,11 @@ export const getTodosAPI = async () => {
   return response.data.data;
 };
 
+export const getTodoByIdAPI = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`);
+  return response.data.data;
+};
+
 export const createTodoAPI = async (text) => {
   const response = await axios.post(API_URL, {
     text: text,
@@ -14,8 +19,16 @@ export const createTodoAPI = async (text) => {
   return response.data.data;
 };
 
-export const updateTodoAPI = async (todo) => {
-  const response = await axios.put(`${API_URL}/${todo.id}`, todo);
+export const updateTodoAPI = async (id, stt) => {
+  const response = await axios.put(`${API_URL}/${id}/${stt}`);
+  return response.data.data;
+};
+
+export const updateManyTodoAPI = async (ids, stt) => {
+  const response = await axios.put(API_URL, {
+    listID: ids,
+    stt: stt,
+  });
   return response.data.data;
 };
 

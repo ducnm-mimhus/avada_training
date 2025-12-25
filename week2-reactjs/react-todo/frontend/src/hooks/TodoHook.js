@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import {
   getTodosAPI,
+  getTodoByIdAPI,
   createTodoAPI,
   updateTodoAPI,
+  updateManyTodoAPI,
   deleteTodoAPI,
 } from "../services/TodoService";
 
@@ -10,14 +12,17 @@ export const useTodos = () => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 1. Load danh sách lúc đầu
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const data = await getTodosAPI();
         if (Array.isArray(data)) {
-          setTodos(data);
+          const normalized = data.map((t) => ({
+            ...t,
+            isCompleted: t.isCompleted === true || t.isCompleted === "true",
+          }));
+          setTodos(normalized);
         } else {
           console.error("API không trả về mảng:", data);
           setTodos([]);
@@ -31,41 +36,71 @@ export const useTodos = () => {
     fetchData();
   }, []);
 
-  // 2. Thêm mới
+  const getById = async (id) => {
+    try {
+      const myTodo = getTodoByIdAPI(id);
+      setTodos([myTodo]);
+    } catch (err) {
+      console.error("Loi tim kiem!");
+    }
+  };
+
   const addTodo = async (text) => {
     try {
       const newTodo = await createTodoAPI(text);
-      setTodos([...todos, newTodo]);
+      const newList = [...todos, newTodo];
+      setTodos(newList);
     } catch (error) {
       console.error("Lỗi thêm:", error);
     }
   };
 
-  // 3. Update / Complete
-  const toggleComplete = async (index) => {
+  const toggleComplete = async (id) => {
     try {
-      const todoToUpdate = {
-        ...todos[index],
-        isCompleted: !todos[index].isCompleted,
-      };
+      const todoToUpdate = todos.find((todo) => todo.id === id);
+      const updatedTodo = await updateTodoAPI(id, !todoToUpdate.isCompleted);
 
-      const updatedTodo = await updateTodoAPI(todoToUpdate);
-
-      const newTodos = [...todos];
-      newTodos[index] = updatedTodo;
-      setTodos(newTodos);
+      setTodos((pre) => {
+        return pre.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...updatedTodo,
+            };
+          }
+          return todo;
+        });
+      });
     } catch (error) {
       console.error("Lỗi update:", error);
     }
   };
 
-  // 4. Delete
-  const removeTodo = async (index) => {
+  const toggleCompleteMany = async (ids, stt) => {
     try {
-      const idToDelete = todos[index].id;
-      await deleteTodoAPI(idToDelete);
+      const listTodoUpdated = await updateManyTodoAPI(ids, stt);
 
-      const newTodos = todos.filter((_, i) => i !== index);
+      setTodos((pre) => {
+        return pre.map((todo) => {
+          if (ids.includes(todo.id)) {
+            const newData = listTodoUpdated.find(
+              (oldData) => oldData.id === todo.id
+            );
+            return {
+              ...newData,
+            };
+          }
+          return todo;
+        });
+      });
+    } catch (error) {
+      console.error("Lỗi update:", error);
+    }
+  };
+
+  const removeTodo = async (id) => {
+    try {
+      await deleteTodoAPI(id);
+      const newTodos = todos.filter((t) => t.id !== id);
       setTodos(newTodos);
     } catch (error) {
       console.error("Lỗi xóa:", error);
@@ -79,7 +114,9 @@ export const useTodos = () => {
     loading,
     addTodo,
     toggleComplete,
+    toggleCompleteMany,
     uncompletedCount,
     removeTodo,
+    getById,
   };
 };
