@@ -7,8 +7,8 @@ function CreateTodoModal({ active, onClose, onAdd }) {
   const handleSubmit = useCallback(() => {
     if (!value) return;
     onAdd(value);
-    setValue(""); // Reset form
-    onClose(); // Đóng modal
+    setValue("");
+    onClose();
   }, [value, onAdd, onClose]);
 
   return (
@@ -34,7 +34,7 @@ function CreateTodoModal({ active, onClose, onAdd }) {
           onChange={setValue}
           autoComplete="off"
           placeholder="What needs to be done?"
-          autoFocus // Tự động focus vào ô input khi mở modal
+          autoFocus
         />
       </Modal.Section>
     </Modal>

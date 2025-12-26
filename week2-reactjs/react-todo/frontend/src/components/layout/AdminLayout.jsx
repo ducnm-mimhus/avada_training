@@ -1,16 +1,15 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { AppProvider, Frame, Navigation, TopBar } from "@shopify/polaris";
 import {
   HomeIcon,
   OrderIcon,
   ProductIcon,
-  ArrowLeftIcon,
-  ExitIcon, // Sửa icon cho hợp lý
+  ExitIcon,
 } from "@shopify/polaris-icons";
 import "@shopify/polaris/build/esm/styles.css";
 import enTranslations from "@shopify/polaris/locales/en.json";
 
-function AdminShell({ children }) {
+function AdminShell({ children, searchValue, onSearchChange }) {
   // --- STATE QUẢN LÝ MENU MOBILE ---
   const [mobileNavigationActive, setMobileNavigationActive] = useState(false);
   const toggleMobileNavigationActive = useCallback(
@@ -61,16 +60,24 @@ function AdminShell({ children }) {
     />
   );
 
-  // 3. Cấu hình TopBar (Thanh đen)
+  const searchFieldMarkup = (
+    <TopBar.SearchField
+      onChange={onSearchChange}
+      value={searchValue}
+      placeholder="Search..."
+      showFocusBorder
+    />
+  );
+
   const topBarMarkup = (
     <TopBar
       showNavigationToggle
       userMenu={userMenuMarkup}
       onNavigationToggle={toggleMobileNavigationActive}
+      searchField={searchFieldMarkup}
     />
   );
 
-  // 4. Cấu hình Navigation (Menu trái)
   const navigationMarkup = (
     <Navigation location="/">
       <Navigation.Section
@@ -80,17 +87,17 @@ function AdminShell({ children }) {
           {
             label: "Todo App",
             icon: HomeIcon,
-            selected: true, // Đánh dấu đang ở trang này
+            selected: true,
           },
           {
             label: "Orders",
             icon: OrderIcon,
-            onClick: () => alert("Tính năng đang phát triển"),
+            onClick: () => alert("Hi hi"),
           },
           {
             label: "Products",
             icon: ProductIcon,
-            onClick: () => alert("Tính năng đang phát triển"),
+            onClick: () => alert("Ha ha"),
           },
         ]}
       />
@@ -99,7 +106,6 @@ function AdminShell({ children }) {
 
   // --- RENDER ---
   return (
-    // Bỏ style height: 500px để app full màn hình
     <AppProvider i18n={enTranslations}>
       <Frame
         logo={logo}
@@ -107,8 +113,8 @@ function AdminShell({ children }) {
         navigation={navigationMarkup}
         showMobileNavigation={mobileNavigationActive}
         onNavigationDismiss={toggleMobileNavigationActive}
+        searchField={searchFieldMarkup}
       >
-        {/* QUAN TRỌNG: Hiển thị nội dung con ở đây */}
         {children}
       </Frame>
     </AppProvider>

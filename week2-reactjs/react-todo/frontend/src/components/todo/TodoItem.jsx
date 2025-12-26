@@ -1,36 +1,35 @@
-import { ResourceItem, Text, Badge } from "@shopify/polaris";
+import {
+  ResourceItem,
+  Text,
+  Badge,
+  Button,
+  InlineStack,
+} from "@shopify/polaris";
 
 function TodoItem({ item, toggleComplete, removeTodo }) {
   const { id, text, isCompleted } = item;
 
-  // Cấu hình nút bấm nhanh (Hover vào mới hiện)
-  const shortcutActions = [
-    {
-      content: isCompleted ? "Undo" : "Complete",
-      onAction: () => toggleComplete(id),
-    },
-    {
-      content: "Delete",
-      destructive: true, // Màu đỏ cảnh báo
-      onAction: () => removeTodo(id),
-    },
-  ];
-
   return (
-    <ResourceItem
-      id={id}
-      accessibilityLabel={`View details for ${text}`}
-      shortcutActions={shortcutActions}
-      persistActions // Luôn hiện nút bấm trên Mobile
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    <ResourceItem id={id}>
+      <InlineStack align="space-between" blockAlign="center" gap="300">
         <Text variant="bodyMd" fontWeight="bold" as="h3">
           {text}
         </Text>
-        <Badge tone={isCompleted ? "success" : "attention"}>
-          {isCompleted ? "Complete" : "Incomplete"}
-        </Badge>
-      </div>
+
+        <InlineStack gap="200" blockAlign="center">
+          <Badge tone={isCompleted ? "success" : "attention"}>
+            {isCompleted ? "Complete" : "Incomplete"}
+          </Badge>
+
+          <Button size="slim" onClick={() => toggleComplete(id)}>
+            {isCompleted ? "Undo" : "Complete"}
+          </Button>
+
+          <Button size="slim" tone="critical" onClick={() => removeTodo(id)}>
+            Delete
+          </Button>
+        </InlineStack>
+      </InlineStack>
     </ResourceItem>
   );
 }
