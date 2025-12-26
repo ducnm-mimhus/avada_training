@@ -6,11 +6,6 @@
       "isCompleted": false
     },
     {
-      "id": "b37bc169-5b72-43b2-8499-b85626831a2d",
-      "text": "Confido suscipio repudiandae vulgaris valetudo beatae.",
-      "isCompleted": false
-    },
-    {
       "id": "8c7b018b-b668-4e53-9e6a-6e92857bd703",
       "text": "Arma derelinquo decor corrigo venia.",
       "isCompleted": false
@@ -18,16 +13,6 @@
     {
       "id": "18dba8f0-7921-4b0f-b84d-714a61badea1",
       "text": "Vinco custodia nam suadeo.",
-      "isCompleted": false
-    },
-    {
-      "id": "1e7afbcf-abde-4c92-8632-19bc8ca4aa76",
-      "text": "Usitas valens abscido sumo.",
-      "isCompleted": false
-    },
-    {
-      "id": "155bde42-a036-44b7-87b0-69b368f0e5b4",
-      "text": "Comparo tepesco triduana pax.",
       "isCompleted": false
     },
     {
@@ -93,6 +78,16 @@
     {
       "text": "Nguyen Minh Duc",
       "id": "dd7055a6-5677-430f-a50f-1eb83b5da64d",
+      "isCompleted": false
+    },
+    {
+      "text": "Nguyen Minh Duc",
+      "id": "5727ebcc-767d-4aaa-bc9e-627108e1344d",
+      "isCompleted": false
+    },
+    {
+      "text": "ABCABCABC",
+      "id": "912fcf91-79c8-4c8c-8404-896e85a50aa7",
       "isCompleted": false
     }
   ]

@@ -6,7 +6,7 @@ import {
   InlineStack,
 } from "@shopify/polaris";
 
-function TodoItem({ item, toggleComplete, removeTodo }) {
+function TodoItem({ item, toggleComplete, requestDelete }) {
   const { id, text, isCompleted } = item;
 
   return (
@@ -25,7 +25,7 @@ function TodoItem({ item, toggleComplete, removeTodo }) {
             {isCompleted ? "Undo" : "Complete"}
           </Button>
 
-          <Button size="slim" tone="critical" onClick={() => removeTodo(id)}>
+          <Button size="slim" tone="critical" onClick={() => requestDelete(id)}>
             Delete
           </Button>
         </InlineStack>

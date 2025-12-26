@@ -30,6 +30,7 @@ function TodoList({ searchValue }) {
   const [activeModal, setActiveModal] = useState(false);
   const [toastContent, setToastContent] = useState(null);
   const [bulkActionType, setBulkActionType] = useState(null);
+  const [idToDelete, setIDToDelete] = useState(null);
 
   // --- Logic Lọc Search ---
   const filteredTodos = useMemo(() => {
@@ -46,6 +47,23 @@ function TodoList({ searchValue }) {
 
   const openBulkConfirm = (type) => setBulkActionType(type);
   const closeBulkConfirm = () => setBulkActionType(null);
+
+  // Logic confirm delete one Todo
+  const requestDelete = (id) => {
+    setIDToDelete(id);
+  };
+
+  const cancelDelete = () => {
+    setIDToDelete(null);
+  };
+
+  const confirmDelete = async () => {
+    if (idToDelete) {
+      await removeTodo(idToDelete);
+      setToastContent("Delete successfully!");
+      setIDToDelete(null);
+    }
+  };
 
   // --- Logic Xử lý Bulk Action ---
   const handleConfirmBulkAction = async () => {
@@ -108,7 +126,7 @@ function TodoList({ searchValue }) {
                 <TodoItem
                   item={item}
                   toggleComplete={toggleComplete}
-                  removeTodo={removeTodo}
+                  requestDelete={requestDelete}
                 />
               )}
               selectedItems={selectedItems}
@@ -159,6 +177,29 @@ function TodoList({ searchValue }) {
                 </li>
               ))}
             </ul>
+          </TextContainer>
+        </Modal.Section>
+      </Modal>
+
+      <Modal
+        open={!!idToDelete}
+        onClose={cancelDelete}
+        title="Delete this Todo?"
+        primaryAction={{
+          content: "Delete",
+          destructive: true,
+          onAction: confirmDelete,
+        }}
+        secondaryActions={[
+          {
+            content: "Cancel",
+            onAction: cancelDelete,
+          },
+        ]}
+      >
+        <Modal.Section>
+          <TextContainer>
+            <p>Are you sure to delete this task? This task cannot be undo!</p>
           </TextContainer>
         </Modal.Section>
       </Modal>
